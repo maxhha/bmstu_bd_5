@@ -18,9 +18,9 @@ CREATE TABLE libraries (
 CREATE TABLE readers (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   address TEXT NOT NULL,
-  phone VARCHAR(20) NOT NULL,
-  name TEXT NOT NULL,
-  email VARCHAR(256) NOT NULL
+  phone VARCHAR(32) NOT NULL UNIQUE,
+  name TEXT NOT NULL UNIQUE,
+  email VARCHAR(256) NOT NULL UNIQUE
 );
 
 CREATE TABLE authors (

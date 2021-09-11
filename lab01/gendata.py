@@ -7,15 +7,18 @@ faker = Faker()
 
 N_AUTHORS = 10
 N_BOOKS = 10
+N_READERS = 10
 BASE_DIR = "./db-data/"
 
 Author = namedtuple("Author", ["id", "name", "birth_date", "death_date"])
 Book = namedtuple("Book", ["id", "published_at", "title", "description"])
-BookAuthorRel = namedtuple("BookAuthorRel", ["id", "author_id", "book_id"])
+AuthorBookRel = namedtuple("AuthorBookRel", ["id", "author_id", "book_id"])
+Reader = namedtuple("Reader", ["id", "address", "phone", "name", "email"])
 
 authors = []
 books = []
 books_authors_rels = []
+readers = []
 
 for _ in range(N_AUTHORS):
     uuid = faker.unique.uuid4()
@@ -59,7 +62,7 @@ for _ in range(N_BOOKS):
 faker.unique.clear()
 
 books_authors_rels = [
-    BookAuthorRel(
+    AuthorBookRel(
         faker.unique.uuid4(),
         auth.id,
         book_id)
@@ -68,6 +71,15 @@ books_authors_rels = [
 ]
 
 faker.unique.clear()
+
+for _ in range(N_READERS):
+    uuid = faker.unique.uuid4()
+    address = repr(faker.address())
+    phone = faker.unique.phone_number()
+    name = faker.unique.name()
+    email = faker.unique.email()
+
+    readers.append(Reader(uuid, address, phone, name, email))
 
 
 def csv(*args):
@@ -105,4 +117,14 @@ with open(BASE_DIR+"authors_books_rel.csv", "w") as f:
             rel.id,
             rel.author_id,
             rel.book_id
+        ))
+
+with open(BASE_DIR+"readers.csv", "w") as f:
+    for reader in readers:
+        f.write(csv(
+            reader.id,
+            reader.address,
+            reader.phone,
+            reader.name,
+            reader.email
         ))
