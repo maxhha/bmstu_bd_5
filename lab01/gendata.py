@@ -155,7 +155,7 @@ for _ in range(N_COMMENTS):
     created_at = faker.date_between(min_date)
     text = "\\n".join(faker.paragraphs())
 
-    comments.append(Comment(uuid, created_at, text, review, reader,
+    comments.append(Comment(uuid, created_at, text, review, reader.id,
                             None if prev_comment is None else prev_comment.id))
 
 

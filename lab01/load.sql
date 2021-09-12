@@ -16,7 +16,7 @@ COPY authors_books_rel(id, author_id, book_id)
     NULL AS 'null'
     CSV;
 
-COPY readers(id, address, phone, name, email)
+COPY readers
     FROM '/var/db-data/readers.csv'
     WITH DELIMITER ';'
     NULL AS 'null'
