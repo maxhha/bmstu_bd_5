@@ -11,6 +11,7 @@ N_BOOKS = 10
 N_READERS = 10
 N_LIBRARIES = 10
 N_CON_BOOKS = 10
+N_REVIEWS = 10
 BASE_DIR = "./db-data/"
 
 Author = namedtuple("Author", ["id", "name", "birth_date", "death_date"])
@@ -20,6 +21,14 @@ Reader = namedtuple("Reader", ["id", "address", "phone", "name", "email"])
 Library = namedtuple("Library", ["id", "address", "phone"])
 ConBook = namedtuple("ConBook", [
                      "id", "printed_at", "publishing_house", "book_id", "library_id", "reader_id"])
+Review = namedtuple("Review", [
+    "id",
+    "created_at",
+    "rate",
+    "text",
+    "reader_id",
+    "book_id"
+])
 
 authors = []
 books = []
@@ -27,6 +36,7 @@ books_authors_rels = []
 readers = []
 libraries = []
 con_books = []
+reviews = []
 
 for _ in range(N_AUTHORS):
     uuid = faker.unique.uuid4()
@@ -115,11 +125,20 @@ for _ in range(N_CON_BOOKS):
     con_books.append(ConBook(uuid, printed_at, publishing_house,
                              book.id, library.id, reader_id))
 
-
 faker.unique.clear()
 
+for _ in range(N_REVIEWS):
+    book = faker.random.choice(books)
+    reader = faker.random.choice(readers)
 
-"library_id", "reader_id"
+    uuid = faker.unique.uuid4()
+    created_at = faker.date_between(book.published_at)
+    rate = faker.random.randint(0, 10)
+    text = "\\n".join(faker.paragraphs())
+
+    reviews.append(Review(uuid, created_at, rate, text, reader.id, book.id))
+
+faker.unique.clear()
 
 
 def csv(*args):
@@ -188,3 +207,8 @@ with open(BASE_DIR+"con_books.csv", "w") as f:
             con_book.library_id,
             con_book.reader_id
         ))
+
+with open(BASE_DIR+"reviews.csv", "w") as f:
+    for review in reviews:
+        f.write(csv(review.id, review.created_at, review.rate,
+                    review.text, review.reader_id, review.book_id))

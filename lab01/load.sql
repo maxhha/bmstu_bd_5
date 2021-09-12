@@ -33,3 +33,10 @@ COPY con_books(id, printed_at, publishing_house, book_id, library_id, reader_id)
     WITH DELIMITER ';'
     NULL AS 'null'
     CSV;
+
+COPY reviews(id, created_at, rate, text, reader_id, book_id)
+    FROM '/var/db-data/reviews.csv'
+    WITH DELIMITER ';'
+    NULL AS 'null'
+    CSV;
+
