@@ -3,16 +3,16 @@ from random import choice
 from faker import Faker
 from datetime import date
 
-Faker.seed(2021_09_11_17_30)
+Faker.seed(2021_09_13_00_12)
 faker = Faker()
 
-N_AUTHORS = 10
-N_BOOKS = 10
-N_READERS = 10
-N_LIBRARIES = 10
-N_CON_BOOKS = 10
-N_REVIEWS = 10
-N_COMMENTS = 10
+N_AUTHORS = 1000
+N_BOOKS = 1000
+N_READERS = 1000
+N_LIBRARIES = 1000
+N_CON_BOOKS = 1000
+N_REVIEWS = 1000
+N_COMMENTS = 1000
 BASE_DIR = "./db-data/"
 
 Author = namedtuple("Author", ["id", "name", "birth_date", "death_date"])
@@ -57,9 +57,8 @@ for _ in range(N_BOOKS):
     while True:
         _authors = faker.random.sample(authors, faker.random.randint(1, 5))
 
-        max_date = min(
-            i.death_date for i in _authors
-            if i.death_date is not None)
+        max_date = min([date.today(), *((i.death_date for i in _authors
+                                         if i.death_date is not None))])
 
         min_date = max(
             i.birth_date for i in _authors)
@@ -156,7 +155,7 @@ for _ in range(N_COMMENTS):
     created_at = faker.date_between(min_date)
     text = "\\n".join(faker.paragraphs())
 
-    comments.append(Comment(uuid, created_at, text, review, reader_id,
+    comments.append(Comment(uuid, created_at, text, review, reader,
                             None if prev_comment is None else prev_comment.id))
 
 
@@ -171,7 +170,7 @@ def csv(*args):
 
 
 def csv_date(date):
-    return date.strftime('%Y-%m-%d')
+    return date.strftime('%Y-%m-%d') if date is not None else None
 
 
 with open(BASE_DIR+"authors.csv", "w") as f:
