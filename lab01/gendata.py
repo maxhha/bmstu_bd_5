@@ -1,4 +1,5 @@
 from collections import namedtuple
+from random import choice
 from faker import Faker
 from datetime import date
 
@@ -9,6 +10,7 @@ N_AUTHORS = 10
 N_BOOKS = 10
 N_READERS = 10
 N_LIBRARIES = 10
+N_CON_BOOKS = 10
 BASE_DIR = "./db-data/"
 
 Author = namedtuple("Author", ["id", "name", "birth_date", "death_date"])
@@ -16,12 +18,15 @@ Book = namedtuple("Book", ["id", "published_at", "title", "description"])
 AuthorBookRel = namedtuple("AuthorBookRel", ["id", "author_id", "book_id"])
 Reader = namedtuple("Reader", ["id", "address", "phone", "name", "email"])
 Library = namedtuple("Library", ["id", "address", "phone"])
+ConBook = namedtuple("ConBook", [
+                     "id", "printed_at", "publishing_house", "book_id", "library_id", "reader_id"])
 
 authors = []
 books = []
 books_authors_rels = []
 readers = []
 libraries = []
+con_books = []
 
 for _ in range(N_AUTHORS):
     uuid = faker.unique.uuid4()
@@ -96,6 +101,26 @@ for _ in range(N_LIBRARIES):
 
 faker.unique.clear()
 
+for _ in range(N_CON_BOOKS):
+    book = faker.random.choice(books)
+    library = faker.random.choice(libraries)
+    reader_id = None
+
+    if faker.random.random() > 0.5:
+        reader_id = faker.random.choice(readers).id
+
+    uuid = faker.unique.uuid4()
+    printed_at = faker.date_between(book.published_at)
+    publishing_house = faker.sentence(nb_words=faker.random.randint(1, 10))
+    con_books.append(ConBook(uuid, printed_at, publishing_house,
+                             book.id, library.id, reader_id))
+
+
+faker.unique.clear()
+
+
+"library_id", "reader_id"
+
 
 def csv(*args):
     return ";".join(
@@ -150,4 +175,16 @@ with open(BASE_DIR+"libraries.csv", "w") as f:
             library.id,
             library.address,
             library.phone
+        ))
+
+
+with open(BASE_DIR+"con_books.csv", "w") as f:
+    for con_book in con_books:
+        f.write(csv(
+            con_book.id,
+            con_book.printed_at,
+            con_book.publishing_house,
+            con_book.book_id,
+            con_book.library_id,
+            con_book.reader_id
         ))

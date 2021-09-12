@@ -27,3 +27,9 @@ COPY libraries(id, address, phone)
     WITH DELIMITER ';'
     NULL AS 'null'
     CSV;
+
+COPY con_books(id, printed_at, publishing_house, book_id, library_id, reader_id)
+    FROM '/var/db-data/con_books.csv'
+    WITH DELIMITER ';'
+    NULL AS 'null'
+    CSV;
