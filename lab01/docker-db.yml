@@ -11,6 +11,10 @@ services:
     volumes:
       - ./db-data:/var/db-data
       - db-data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
 
 volumes:
   db-data:
