@@ -8,17 +8,20 @@ faker = Faker()
 N_AUTHORS = 10
 N_BOOKS = 10
 N_READERS = 10
+N_LIBRARIES = 10
 BASE_DIR = "./db-data/"
 
 Author = namedtuple("Author", ["id", "name", "birth_date", "death_date"])
 Book = namedtuple("Book", ["id", "published_at", "title", "description"])
 AuthorBookRel = namedtuple("AuthorBookRel", ["id", "author_id", "book_id"])
 Reader = namedtuple("Reader", ["id", "address", "phone", "name", "email"])
+Library = namedtuple("Library", ["id", "address", "phone"])
 
 authors = []
 books = []
 books_authors_rels = []
 readers = []
+libraries = []
 
 for _ in range(N_AUTHORS):
     uuid = faker.unique.uuid4()
@@ -81,6 +84,18 @@ for _ in range(N_READERS):
 
     readers.append(Reader(uuid, address, phone, name, email))
 
+faker.unique.clear()
+
+for _ in range(N_LIBRARIES):
+    uuid = faker.unique.uuid4()
+    address = repr(faker.address())
+    phone = faker.unique.phone_number()
+
+    libraries.append(Library(uuid, address, phone))
+
+
+faker.unique.clear()
+
 
 def csv(*args):
     return ";".join(
@@ -127,4 +142,12 @@ with open(BASE_DIR+"readers.csv", "w") as f:
             reader.phone,
             reader.name,
             reader.email
+        ))
+
+with open(BASE_DIR+"libraries.csv", "w") as f:
+    for library in libraries:
+        f.write(csv(
+            library.id,
+            library.address,
+            library.phone
         ))

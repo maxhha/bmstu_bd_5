@@ -21,3 +21,9 @@ COPY readers(id, address, phone, name, email)
     WITH DELIMITER ';'
     NULL AS 'null'
     CSV;
+
+COPY libraries(id, address, phone)
+    FROM '/var/db-data/libraries.csv'
+    WITH DELIMITER ';'
+    NULL AS 'null'
+    CSV;

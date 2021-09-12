@@ -12,7 +12,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE libraries (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   address TEXT NOT NULL,
-  phone VARCHAR(20) NOT NULL
+  phone VARCHAR(32) NOT NULL
 );
 
 CREATE TABLE readers (
