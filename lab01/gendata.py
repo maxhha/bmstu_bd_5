@@ -12,6 +12,7 @@ N_READERS = 10
 N_LIBRARIES = 10
 N_CON_BOOKS = 10
 N_REVIEWS = 10
+N_COMMENTS = 10
 BASE_DIR = "./db-data/"
 
 Author = namedtuple("Author", ["id", "name", "birth_date", "death_date"])
@@ -21,14 +22,10 @@ Reader = namedtuple("Reader", ["id", "address", "phone", "name", "email"])
 Library = namedtuple("Library", ["id", "address", "phone"])
 ConBook = namedtuple("ConBook", [
                      "id", "printed_at", "publishing_house", "book_id", "library_id", "reader_id"])
-Review = namedtuple("Review", [
-    "id",
-    "created_at",
-    "rate",
-    "text",
-    "reader_id",
-    "book_id"
-])
+Review = namedtuple(
+    "Review", ["id", "created_at", "rate", "text", "reader_id", "book_id"])
+Comment = namedtuple(
+    "Comment", ["id", "created_at", "text", "review", "reader_id", "prev_comment_id"])
 
 authors = []
 books = []
@@ -37,6 +34,7 @@ readers = []
 libraries = []
 con_books = []
 reviews = []
+comments = []
 
 for _ in range(N_AUTHORS):
     uuid = faker.unique.uuid4()
@@ -140,6 +138,30 @@ for _ in range(N_REVIEWS):
 
 faker.unique.clear()
 
+for _ in range(N_COMMENTS):
+    prev_comment = None
+
+    if len(comments) > 0 and faker.random.random() > 0.5:
+        prev_comment = faker.random.choice(comments)
+
+    review = faker.random.choice(
+        reviews) if prev_comment is None else prev_comment.review
+    reader = faker.random.choice(readers)
+
+    min_date = review.created_at
+    if prev_comment is not None:
+        min_date = prev_comment.created_at
+
+    uuid = faker.unique.uuid4()
+    created_at = faker.date_between(min_date)
+    text = "\\n".join(faker.paragraphs())
+
+    comments.append(Comment(uuid, created_at, text, review, reader_id,
+                            None if prev_comment is None else prev_comment.id))
+
+
+faker.unique.clear()
+
 
 def csv(*args):
     return ";".join(
@@ -201,7 +223,7 @@ with open(BASE_DIR+"con_books.csv", "w") as f:
     for con_book in con_books:
         f.write(csv(
             con_book.id,
-            con_book.printed_at,
+            csv_date(con_book.printed_at),
             con_book.publishing_house,
             con_book.book_id,
             con_book.library_id,
@@ -210,5 +232,11 @@ with open(BASE_DIR+"con_books.csv", "w") as f:
 
 with open(BASE_DIR+"reviews.csv", "w") as f:
     for review in reviews:
-        f.write(csv(review.id, review.created_at, review.rate,
+        f.write(csv(review.id, csv_date(review.created_at), review.rate,
                     review.text, review.reader_id, review.book_id))
+
+
+with open(BASE_DIR+"comments.csv", "w") as f:
+    for comment in comments:
+        f.write(csv(comment.id, csv_date(comment.created_at), comment.text, comment.review.id,
+                    comment.reader_id, comment.prev_comment_id))

@@ -40,3 +40,9 @@ COPY reviews(id, created_at, rate, text, reader_id, book_id)
     NULL AS 'null'
     CSV;
 
+COPY comments(id, created_at, text, review_id, reader_id, prev_comment_id)
+    FROM '/var/db-data/comments.csv'
+    WITH DELIMITER ';'
+    NULL AS 'null'
+    CSV;
+
