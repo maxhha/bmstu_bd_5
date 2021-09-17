@@ -39,8 +39,8 @@ CREATE TABLE books (
 
 CREATE TABLE authors_books_rel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  author_id UUID NOT NULL,
-  book_id UUID NOT NULL,
+  author_id UUID NOT NULL UNIQUE,
+  book_id UUID NOT NULL UNIQUE,
   CONSTRAINT fk_author FOREIGN KEY(author_id) REFERENCES authors(id),
   CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id)
 );
