@@ -194,3 +194,31 @@ WHERE id IN (
   ) x
   WHERE x.n > 1
 );
+
+
+-- ЗАШИТА
+-- вывести список авторов кто старше среднего возраста и имеет хотя бы одну книги с оценкой 4 5
+-- вывести список имен и название 
+
+CREATE OR REPLACE FUNCTION get_age(birth_date DATE, death_date DATE)
+RETURNS INT AS $$
+BEGIN
+    RETURN EXTRACT(year FROM age(COALESCE(death_date, NOW()), birth_date));
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT a.name, get_age(a.birth_date, a.death_date), b.title
+FROM authors a
+JOIN authors_books_rel ab ON ab.author_id = a.id
+JOIN books b ON b.id = ab.book_id
+WHERE
+get_age(a.birth_date, a.death_date) > (
+    SELECT AVG(get_age(aa.birth_date, aa.death_date)) 
+    FROM authors aa
+  )
+AND
+b.id IN (
+	SELECT DISTINCT r.book_id
+    FROM reviews r
+    WHERE r.rate BETWEEN 4 AND 5
+)
