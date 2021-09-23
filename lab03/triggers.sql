@@ -12,32 +12,27 @@ SELECT name, get_age(birth_date, death_date) FROM authors;
 -- --  ---  -- -- ---- ------
 
 -- Подставляемая табличная функция.
-CREATE TEMP TABLE author_rate (
-  id UUID PRIMARY KEY,
-  name TEXT NOT NULL,
-  birth_date DATE NOT NULL,
+CREATE OR REPLACE FUNCTION get_authors_rates(from_published_at DATE)
+RETURNS TABLE (
+  id UUID,
+  name TEXT,
+  birth_date DATE,
   death_date DATE,
   rate INT
-);
-CREATE OR REPLACE FUNCTION get_authors_rates(_tbl_type ANYELEMENT, published_at DATE)
-RETURNS SETOF ANYELEMENT
+)
 AS $$
 BEGIN
   RETURN QUERY
-  EXECUTE
-  '
     SELECT a.id, a.name, a.birth_date, a.death_date, AVG(rv.rate)::INT
     FROM authors a
     JOIN authors_books_rel ab ON ab.author_id = a.id
-    JOIN books b ON b.id = b.book_id
+    JOIN books b ON b.id = ab.book_id
     JOIN reviews rv ON rv.book_id = b.id
-    WHERE b.published_at >= $1
-    GROUP BY a.id, a.name, a.birth_date, a.death_date
-  '
-  USING published_at;
+    WHERE b.published_at >= from_published_at
+    GROUP BY a.id, a.name, a.birth_date, a.death_date;
 END;
 $$ LANGUAGE PLPGSQL;
-SELECT * FROM get_authors_rates(NULL::author_rate, '2020-01-01')
+SELECT * FROM get_authors_rates('2020-01-01');
 
 -- --  ---  -- -- ---- -- --
 ---   -- -- ----- ---  -- --
