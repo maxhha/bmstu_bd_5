@@ -79,3 +79,61 @@ CREATE TABLE comments (
   CONSTRAINT fk_review FOREIGN KEY(review_id) REFERENCES reviews(id),
   CONSTRAINT fk_prev_comment FOREIGN KEY(prev_comment_id) REFERENCES comments(id)
 );
+
+-- ЗАЩИТА 1 Я ЕБАЛ
+
+CREATE OR REPLACE FUNCTION update_reviews_karma()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE reviews r
+  SET karma = (
+    SELECT SUM(c.karma)
+    FROM comments c
+    WHERE c.review_id = r.id
+  )
+  WHERE r.id = NEW.review_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE PLPGSQL;
+
+DROP TRIGGER IF EXISTS trig_reviews_karma ON comments;
+
+CREATE TRIGGER trig_reviews_karma
+AFTER INSERT OR UPDATE OR DELETE 
+ON comments
+FOR EACH ROW
+EXECUTE PROCEDURE update_reviews_karma();
+
+INSERT INTO comments(text, review_id, reader_id, prev_comment_id, karma)
+VALUES ('-', '002e3a9e-59c6-498c-b772-05ba4051f763', '00db799c-dbf4-432b-a393-207749aed728', NULL, 10)
+
+SELECT karma
+FROM reviews 
+WHERE id = '002e3a9e-59c6-498c-b772-05ba4051f763'
+
+
+CREATE OR REPLACE FUNCTION update_readers_karma()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE readers r
+  SET karma = (
+    SELECT SUM(r.karma)
+    FROM reviews rv
+    WHERE rv.reader_id = r.id
+  )
+  WHERE r.id = NEW.reader_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE PLPGSQL;
+
+DROP TRIGGER IF EXISTS trig_readers_karma ON reviews;
+
+CREATE TRIGGER trig_readers_karma
+AFTER INSERT OR UPDATE OR DELETE 
+ON reviews
+FOR EACH ROW
+EXECUTE PROCEDURE update_readers_karma();
+
+INSERT INTO comments(text, review_id, reader_id, prev_comment_id, karma)
+VALUES ('-', '002e3a9e-59c6-498c-b772-05ba4051f763', '00db799c-dbf4-432b-a393-207749aed728', NULL, 10)
+
