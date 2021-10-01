@@ -2,6 +2,7 @@ from collections import namedtuple
 from random import choice
 from faker import Faker
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 Faker.seed(2021_09_13_00_12)
 faker = Faker()
@@ -43,7 +44,8 @@ for _ in range(N_AUTHORS):
     death_date = None
 
     if birth_date < date(1980, 1, 1) or faker.random.random() > 0.8:
-        death_date = faker.date_between(start_date=birth_date)
+        death_date = faker.date_between(
+            start_date=birth_date, end_date=birth_date + relativedelta(years=110))
 
     authors.append(Author(uuid, name, birth_date, death_date))
 
