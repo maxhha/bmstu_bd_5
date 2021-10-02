@@ -26,7 +26,6 @@ VALUES
   (1, 'B', '2018-09-19', '5999-12-31');
 
 
--- ХУЕВЫЙ ВАРИАНТ
 WITH tablex AS (
   SELECT *, ROW_NUMBER() OVER(PARTITION BY t.id) n
   FROM (
@@ -53,7 +52,7 @@ tablex1 AS (
   SELECT t.id, t.var1, t.valid_from_dttm
   FROM (
     SELECT 
-      tx.id, t1.var1, tx.valid_from_dttm, 
+      tx.id, t1.var1, tx.valid_from_dttm,
       ROW_NUMBER() OVER(
         PARTITION BY tx.id, tx.valid_from_dttm ORDER BY t1.valid_to_dttm DESC
       ) n
@@ -82,7 +81,7 @@ JOIN tablex1 tx1 ON tx1.id = tx.id AND tx1.valid_from_dttm = tx.valid_from_dttm
 JOIN tablex2 tx2 ON tx2.id = tx.id AND tx2.valid_from_dttm = tx.valid_from_dttm
 JOIN tabley ty ON ty.id = tx.id AND ty.n = tx.n;
 
--- ТРУШНЫЙ ВАРИАНТ
+
 SELECT t1.id, t1.var1, t2.var2,
  GREATEST(t1.valid_from_dttm, t2.valid_from_dttm),
  LEAST(t1.valid_to_dttm, t2.valid_to_dttm)

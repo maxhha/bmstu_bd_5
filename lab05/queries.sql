@@ -46,4 +46,4 @@ SET data = data || '{"url":"http://yandex.com/"}'::jsonb
 WHERE data->'data'->>'source' = 'yandex';
 
 -- Разделить JSON документ на несколько строк по узлам.
-SELECT * FROM jsonb_array_elements(:'content')
+SELECT * FROM jsonb_array_elements(:'content');
