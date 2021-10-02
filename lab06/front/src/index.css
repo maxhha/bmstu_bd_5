@@ -6,3 +6,7 @@ kbd,
 samp {
   font-family: "Press Start 2P", cursive;
 }
+
+body {
+  margin: 0.5rem;
+}
