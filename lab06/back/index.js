@@ -17,6 +17,25 @@ router.get("/count_reviews", async (req, res) => {
   res.json(await db.any(query));
 });
 
+router.get("/get_books", async (req, res) => {
+  const query = `
+    SELECT b.title, a.name
+    FROM books b
+    JOIN authors_books_rel ab ON ab.book_id = b.id
+    JOIN authors a ON ab.author_id = a.id
+    OFFSET $1
+    LIMIT 25;
+  `;
+
+  if (req.query.query) return res.json({ query });
+
+  try {
+    res.json(await db.any(query, JSON.parse(req.query.params)));
+  } catch (error) {
+    res.json({ error: error.message || error });
+  }
+});
+
 app.use(cors({ origin: "*" }));
 app.use("/api/v1", router);
 

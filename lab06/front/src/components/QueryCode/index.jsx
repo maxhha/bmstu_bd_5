@@ -5,7 +5,7 @@ const QueryCode = ({ code }) => {
   return (
     <>
       <div className="QueryCode">
-        <span class="QueryCode__title">Запрос</span>
+        <span className="QueryCode__title">Запрос</span>
         {code && <Highlight className="sql">{code}</Highlight>}
       </div>
     </>

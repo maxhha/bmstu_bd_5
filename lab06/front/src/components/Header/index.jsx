@@ -24,7 +24,7 @@ const Header = ({ value, onSelect }) => {
             Выберете запрос...
           </option>
           <option value="count_reviews">count reviews</option>
-          <option value="1">Not to be</option>
+          <option value="get_books">get books</option>
         </select>
       </div>
     </div>

@@ -15,3 +15,7 @@ body {
 .nes-text.is-dark {
   color: #fff;
 }
+
+.nes-field.is-dark > label {
+  color: #fff;
+}

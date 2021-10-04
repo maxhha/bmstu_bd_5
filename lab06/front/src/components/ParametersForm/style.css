@@ -1,0 +1,16 @@
+.ParametersForm {
+  background-color: #212529;
+  padding: 1rem 1.2rem 1rem 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.ParametersForm__row {
+}
+
+.ParametersForm__label {
+  color: #fff;
+}
+
+.ParametersForm__input {
+}

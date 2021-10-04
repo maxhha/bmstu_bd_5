@@ -2,13 +2,13 @@ const AutoTable = ({ data }) => {
   const keys = Object.keys(data[0]);
 
   return (
-    <table className="nes-table is-dark is-bordered">
+    <table className="nes-table is-bordered">
       <thead>
-        <th>
+        <tr>
           {keys.map((key) => (
-            <td key="key">{key}</td>
+            <th key={key}>{key}</th>
           ))}
-        </th>
+        </tr>
       </thead>
       <tbody>
         {data.map((row, i) => (
