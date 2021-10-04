@@ -9,4 +9,9 @@ samp {
 
 body {
   margin: 0.5rem;
+  background-color: #212529;
+}
+
+.nes-text.is-dark {
+  color: #fff;
 }
