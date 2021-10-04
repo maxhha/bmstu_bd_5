@@ -13,6 +13,7 @@ const ParametersForm = ({ params, onChange }) => {
 
   return (
     <div className="ParametersForm">
+      <label className="ParametersForm__title">Параметры</label>
       {params.map((val, i) => (
         <div className="nes-field is-dark ParametersForm__row" key={i}>
           <label

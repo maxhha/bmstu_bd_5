@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.ParametersForm__title {
+  color: #fff;
+}
+
 .ParametersForm__row {
 }
 
