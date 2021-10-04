@@ -3,13 +3,14 @@ import Header from "./components/Header";
 import QueryCode from "./components/QueryCode";
 import useFetch from "use-http";
 import { API_URL } from "./constants";
+import AutoTable from "./components/AutoTable";
 
 function App() {
   const [query, setQuery] = useState();
   const [answer, setAnswer] = useState();
 
   const queryInfo = useFetch(`${API_URL}/${query}?query=1`, {}, [query]);
-  const { get } = useFetch(API_URL);
+  const queryData = useFetch(API_URL);
 
   const handleSelect = useCallback((query) => {
     setQuery(query);
@@ -17,9 +18,9 @@ function App() {
   }, []);
 
   const handleClickLoad = useCallback(async () => {
-    const resp = await get(query);
+    const resp = await queryData.get(query);
     setAnswer(resp);
-  }, [query]);
+  }, [query, queryData.get]);
 
   return (
     <div>
@@ -37,18 +38,14 @@ function App() {
       )}
       {query && queryInfo.data?.query && (
         <button
-          class="nes-button"
-          disabled={queryInfo.data?.query == void 0}
+          class="nes-btn"
+          disabled={queryInfo.data?.query == void 0 || queryData.loading}
           onClick={handleClickLoad}
         >
           Запросить
         </button>
       )}
-      {answer && (
-        <pre className="nes-text is-dark">
-          {JSON.stringify(answer, null, 2)}
-        </pre>
-      )}
+      {answer && <AutoTable data={answer} />}
     </div>
   );
 }
