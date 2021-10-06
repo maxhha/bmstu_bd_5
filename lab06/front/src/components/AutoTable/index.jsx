@@ -1,8 +1,17 @@
+import { useEffect, useRef } from "react";
+
 const AutoTable = ({ data }) => {
   const keys = Object.keys(data[0]);
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+    });
+  });
 
   return (
-    <table className="nes-table is-bordered">
+    <table className="nes-table is-bordered" ref={ref}>
       <thead>
         <tr>
           {keys.map((key) => (

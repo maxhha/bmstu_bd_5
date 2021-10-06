@@ -11,7 +11,11 @@ function App() {
   const [params, setParams] = useState([]);
   const [answer, setAnswer] = useState();
 
-  const queryInfo = useFetch(`${API_URL}/${query}?query=1`, {}, [query]);
+  const queryInfo = useFetch(
+    `${API_URL}/${query}?query=1`,
+    { cache: "no-cache" },
+    [query]
+  );
   const queryData = useFetch(API_URL);
 
   const handleSelect = useCallback((query) => {
@@ -64,6 +68,7 @@ function App() {
         </button>
       )}
       {answer?.length && <AutoTable data={answer} />}
+      {answer?.length === 0 && <pre className="nes-text is-error">No data</pre>}
       {answer?.error && (
         <pre className="nes-text is-error">
           {answer.error.message ||

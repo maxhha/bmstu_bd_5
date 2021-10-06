@@ -25,6 +25,10 @@ const Header = ({ value, onSelect }) => {
           </option>
           <option value="count_reviews">count reviews</option>
           <option value="get_books">get books</option>
+          <option value="get_avg_n_reviews_per_book_owner">
+            get avg n reviews per book owner
+          </option>
+          <option value="get_datconnlimit">get datconnlimit</option>
         </select>
       </div>
     </div>
