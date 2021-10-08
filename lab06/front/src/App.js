@@ -16,7 +16,7 @@ function App() {
     { cache: "no-cache" },
     [query]
   );
-  const queryData = useFetch(API_URL);
+  const queryData = useFetch(API_URL, { cache: "no-cache" });
 
   const handleSelect = useCallback((query) => {
     setQuery(query);

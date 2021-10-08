@@ -98,6 +98,17 @@ END;
 $$ LANGUAGE PLPGSQL;
 CALL update_rate('002e3a9e-59c6-498c-b772-05ba4051f763', 10);
 
+CREATE OR REPLACE PROCEDURE update_death_date(author_id UUID, new_death_date DATE)
+AS $$
+BEGIN
+  UPDATE authors
+  SET death_date = new_death_date
+  WHERE id = author_id;
+  COMMIT;
+END;
+$$ LANGUAGE PLPGSQL;
+CALL update_rate('002e3a9e-59c6-498c-b772-05ba4051f763', 10);
+
 -- --  ---  -- -- ---- -- --
 ---   -- -- ----- ---  -- --
 -- --  ---  -- -- ---- ------

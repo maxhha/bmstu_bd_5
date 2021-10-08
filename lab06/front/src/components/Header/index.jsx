@@ -29,6 +29,15 @@ const Header = ({ value, onSelect }) => {
             get avg n reviews per book owner
           </option>
           <option value="get_datconnlimit">get datconnlimit</option>
+          <option value="get_age">get age</option>
+          <option value="get_authors_rates">get authors rates</option>
+          <option value="update_author_death_date">
+            update author death date
+          </option>
+          <option value="current_database">current database</option>
+          <option value="create_table">create table</option>
+          <option value="insert_table">insert table</option>
+          <option value="select_table">select table</option>
         </select>
       </div>
     </div>
