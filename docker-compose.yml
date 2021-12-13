@@ -13,8 +13,15 @@ services:
     volumes:
       - ./lab01/db-data:/var/db-data
       - db-data:/var/lib/postgresql/data
-  adminer:
-    image: adminer
+  nifi:
+    image: apache/nifi:latest
+    container_name: nifidbcourse
+    environment:
+      - NIFI_WEB_HTTP_PORT=8080
+      - NIFI_JVM_HEAP_INIT=2g
+      - NIFI_JVM_HEAP_MAX=3g
+    volumes:
+      - ./lab08:/opt/nifi/nifi-current/userdata
     ports:
       - 8080:8080
 
