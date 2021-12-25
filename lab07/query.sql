@@ -1,0 +1,2 @@
+ALTER TABLE libraries
+ADD COLUMN info JSON

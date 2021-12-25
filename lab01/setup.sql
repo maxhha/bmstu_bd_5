@@ -41,8 +41,8 @@ CREATE TABLE authors_books_rel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   author_id UUID NOT NULL,
   book_id UUID NOT NULL,
-  CONSTRAINT fk_author FOREIGN KEY(author_id) REFERENCES authors(id),
-  CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id)
+  CONSTRAINT fk_author FOREIGN KEY(author_id) REFERENCES authors(id) ON DELETE CASCADE,
+  CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 CREATE TABLE con_books (
@@ -52,9 +52,9 @@ CREATE TABLE con_books (
   book_id UUID NOT NULL,
   library_id UUID NOT NULL,
   reader_id UUID,
-  CONSTRAINT fk_library FOREIGN KEY(library_id) REFERENCES libraries(id),
-  CONSTRAINT fk_reader FOREIGN KEY(reader_id) REFERENCES readers(id),
-  CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id)
+  CONSTRAINT fk_library FOREIGN KEY(library_id) REFERENCES libraries(id) ON DELETE CASCADE,
+  CONSTRAINT fk_reader FOREIGN KEY(reader_id) REFERENCES readers(id) ON DELETE CASCADE,
+  CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 CREATE TABLE reviews (
@@ -64,8 +64,8 @@ CREATE TABLE reviews (
   text TEXT NOT NULL,
   reader_id UUID NOT NULL,
   book_id UUID NOT NULL,
-  CONSTRAINT fk_reader FOREIGN KEY(reader_id) REFERENCES readers(id),
-  CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id)
+  CONSTRAINT fk_reader FOREIGN KEY(reader_id) REFERENCES readers(id) ON DELETE CASCADE,
+  CONSTRAINT fk_book FOREIGN KEY(book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
@@ -75,9 +75,9 @@ CREATE TABLE comments (
   review_id UUID NOT NULL,
   reader_id UUID NOT NULL,
   prev_comment_id UUID,
-  CONSTRAINT fk_reader FOREIGN KEY(reader_id) REFERENCES readers(id),
-  CONSTRAINT fk_review FOREIGN KEY(review_id) REFERENCES reviews(id),
-  CONSTRAINT fk_prev_comment FOREIGN KEY(prev_comment_id) REFERENCES comments(id)
+  CONSTRAINT fk_reader FOREIGN KEY(reader_id) REFERENCES readers(id) ON DELETE CASCADE,
+  CONSTRAINT fk_review FOREIGN KEY(review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+  CONSTRAINT fk_prev_comment FOREIGN KEY(prev_comment_id) REFERENCES comments(id) ON DELETE CASCADE
 );
 
 -- ЗАЩИТА 1 Я ЕБАЛ
